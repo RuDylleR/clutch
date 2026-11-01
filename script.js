@@ -57,6 +57,16 @@ function renderHeader() {
                 <time id="kyiv-time">--:--:--</time>
             </div>
 
+            <button class="theme-toggle" id="theme-toggle" type="button">
+                <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+                </svg>
+                <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+                </svg>
+            </button>
+
             <button class="menu-toggle" type="button" aria-label="Відкрити меню" aria-expanded="false" aria-controls="site-nav">
                 <span></span><span></span><span></span>
             </button>
@@ -104,11 +114,58 @@ function applySiteLinks() {
     });
 }
 
+// ---------- Светлая / тёмная тема ----------
+
+// Начальную тему ставит скрипт в <head>; здесь только переключатель
+const THEME_KEY = "clutch-theme";
+
+function currentTheme() {
+    return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+}
+
+function updateThemeToggle() {
+    const toggle = document.getElementById("theme-toggle");
+
+    if (!toggle) {
+        return;
+    }
+
+    const label = currentTheme() === "light" ? "Увімкнути темну тему" : "Увімкнути світлу тему";
+
+    toggle.setAttribute("aria-label", label);
+    toggle.setAttribute("title", label);
+}
+
+function initThemeToggle() {
+    const toggle = document.getElementById("theme-toggle");
+
+    if (!toggle) {
+        return;
+    }
+
+    updateThemeToggle();
+
+    toggle.addEventListener("click", () => {
+        const next = currentTheme() === "light" ? "dark" : "light";
+
+        document.documentElement.dataset.theme = next;
+        updateThemeToggle();
+
+        try {
+            localStorage.setItem(THEME_KEY, next);
+        } catch (error) {
+            // приватный режим: тема просто не запомнится
+        }
+    });
+}
+
+
 // Шапка и футер должны появиться до всего остального:
 // ниже скрипт ищет в них #kyiv-time и кнопку меню.
 renderHeader();
 renderFooter();
 applySiteLinks();
+initThemeToggle();
 
 
 // ---------- Время в Киеве ----------

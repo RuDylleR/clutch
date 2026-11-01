@@ -10,21 +10,67 @@
 
 /* ================= VARIABLES ================= */
 
+/* Тёмная тема — по умолчанию. Светлая включается атрибутом data-theme="light" на <html>
+   (его ставит маленький скрипт в <head> каждой страницы, см. также переключатель в шапке). */
 :root {
-    --bg: #11110f;
-    --bg-secondary: #181815;
-    --bg-card: #20201c;
+    color-scheme: dark;
 
-    --text: #f1eee7;
-    --text-muted: #aaa79f;
+    --bg: #15181c;
+    --bg-secondary: #1b1f24;
+    --bg-card: #22272d;
 
-    --accent: #d8b46a;
-    --accent-hover: #e8c77f;
+    --text: #e9edf1;
+    --text-muted: #9ba5b0;
+
+    --accent: #9fcbf0;
+    --accent-hover: #bddcf7;
+    --accent-rgb: 159, 203, 240;
+    --on-accent: #0f1923;
 
     --border: rgba(255, 255, 255, 0.10);
 
+    --header-bg: rgba(21, 24, 28, 0.92);
+    --footer-bg: #101316;
+    --image-bg: #2a3037;
+    --overlay: rgba(14, 17, 20, 0.9);
+    --panel-bg: rgba(27, 31, 36, 0.96);
+    --hover-tint: rgba(255, 255, 255, 0.03);
+    --watermark: rgba(255, 255, 255, 0.025);
+    --placeholder: #66707b;
+    --error: #e9a08b;
+    --shadow: rgba(0, 0, 0, 0.45);
+
     --container: 1180px;
     --radius: 8px;
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+
+    --bg: #eceef1;
+    --bg-secondary: #e6e9ed;
+    --bg-card: #ffffff;
+
+    --text: #171b20;
+    --text-muted: #566170;
+
+    --accent: #1767c9;
+    --accent-hover: #0f4fa3;
+    --accent-rgb: 23, 103, 201;
+    --on-accent: #ffffff;
+
+    --border: rgba(0, 0, 0, 0.12);
+
+    --header-bg: rgba(236, 238, 241, 0.92);
+    --footer-bg: #dde2e8;
+    --image-bg: #d5dae0;
+    --overlay: rgba(255, 255, 255, 0.92);
+    --panel-bg: rgba(255, 255, 255, 0.97);
+    --hover-tint: rgba(0, 0, 0, 0.04);
+    --watermark: rgba(0, 0, 0, 0.04);
+    --placeholder: #7d8794;
+    --error: #b7452b;
+    --shadow: rgba(20, 30, 45, 0.18);
 }
 
 
@@ -170,7 +216,7 @@ textarea {
 
     width: 100%;
 
-    background: rgba(17, 17, 15, 0.92);
+    background: var(--header-bg);
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(14px);
 }
@@ -276,6 +322,51 @@ textarea {
 }
 
 
+.theme-toggle {
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    background: transparent;
+    color: var(--accent);
+
+    transition:
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent-hover);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Показываем иконку той темы, на которую переключит кнопка */
+.theme-toggle__sun {
+    display: none;
+}
+
+:root:not([data-theme="light"]) .theme-toggle__sun {
+    display: block;
+}
+
+:root:not([data-theme="light"]) .theme-toggle__moon {
+    display: none;
+}
+
+
 /* ================= KYIV TIME ================= */
 
 .kyiv-time {
@@ -320,13 +411,13 @@ textarea {
     background:
         radial-gradient(
             circle at 75% 50%,
-            rgba(216, 180, 106, 0.08),
+            rgba(var(--accent-rgb), 0.08),
             transparent 32%
         ),
         linear-gradient(
             135deg,
-            #11110f 0%,
-            #171713 100%
+            var(--bg) 0%,
+            var(--bg-secondary) 100%
         );
 }
 
@@ -343,7 +434,7 @@ textarea {
 
     transform: translateY(-50%);
 
-    color: rgba(255, 255, 255, 0.025);
+    color: var(--watermark);
 
     font-size: clamp(14rem, 30vw, 30rem);
     font-weight: 900;
@@ -432,7 +523,7 @@ textarea {
 
 .button--primary {
     background: var(--accent);
-    color: #11110f;
+    color: var(--on-accent);
 }
 
 .button--primary:hover {
@@ -490,7 +581,7 @@ textarea {
 .calc-tab.is-active {
     background: var(--accent);
     border-color: var(--accent);
-    color: #111;
+    color: var(--on-accent);
 }
 
 /* Один автомобіль */
@@ -558,7 +649,7 @@ textarea {
 }
 
 .input-wrapper input::placeholder {
-    color: #55554f;
+    color: var(--placeholder);
 
     font-size: 0.95rem;
     font-weight: 400;
@@ -587,7 +678,7 @@ textarea {
     background:
         linear-gradient(
             145deg,
-            rgba(216, 180, 106, 0.08),
+            rgba(var(--accent-rgb), 0.08),
             transparent
         );
 }
@@ -673,7 +764,7 @@ textarea {
 .calc-error {
     grid-column: 1 / -1;
 
-    color: #e9a08b;
+    color: var(--error);
 
     font-size: 0.85rem;
 }
@@ -773,7 +864,7 @@ textarea {
 
 .car-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(216, 180, 106, 0.5);
+    border-color: rgba(var(--accent-rgb), 0.5);
 }
 
 .car-card__image {
@@ -781,7 +872,7 @@ textarea {
 
     overflow: hidden;
 
-    background: #282824;
+    background: var(--image-bg);
 }
 
 .car-card__image img {
@@ -871,7 +962,7 @@ textarea {
 
 .community-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(216, 180, 106, 0.5);
+    border-color: rgba(var(--accent-rgb), 0.5);
 }
 
 .community-card h3 {
@@ -923,7 +1014,7 @@ textarea {
 .club-card:hover {
     padding-left: 20px;
 
-    background: rgba(255, 255, 255, 0.025);
+    background: var(--hover-tint);
 }
 
 .club-card__number {
@@ -959,7 +1050,7 @@ textarea {
 
     border-top: 1px solid var(--border);
 
-    background: #0c0c0b;
+    background: var(--footer-bg);
 }
 
 .footer__inner {
@@ -1026,7 +1117,7 @@ textarea {
     background:
         radial-gradient(
             circle at 80% 30%,
-            rgba(216, 180, 106, 0.07),
+            rgba(var(--accent-rgb), 0.07),
             transparent 30%
         ),
         var(--bg);
@@ -1152,7 +1243,7 @@ textarea {
 }
 
 .filter-group input::placeholder {
-    color: #66645e;
+    color: var(--placeholder);
 }
 
 .filter-group select {
@@ -1182,7 +1273,7 @@ textarea {
     color: var(--accent);
     border-color: var(--accent);
 
-    background: rgba(216, 180, 106, 0.04);
+    background: rgba(var(--accent-rgb), 0.04);
 }
 
 
@@ -1209,7 +1300,7 @@ textarea {
 .catalog-car:hover {
     transform: translateY(-5px);
 
-    border-color: rgba(216, 180, 106, 0.5);
+    border-color: rgba(var(--accent-rgb), 0.5);
 }
 
 .catalog-car__image {
@@ -1219,7 +1310,7 @@ textarea {
 
     overflow: hidden;
 
-    background: #292925;
+    background: var(--image-bg);
 }
 
 .catalog-car__image img {
@@ -1261,7 +1352,7 @@ textarea {
 
     padding: 8px 12px;
 
-    background: rgba(12, 12, 11, 0.9);
+    background: var(--overlay);
     color: var(--text);
 
     border: 1px solid var(--border);
@@ -1286,7 +1377,7 @@ textarea {
 .compare-toggle[aria-pressed="true"] {
     background: var(--accent);
     border-color: var(--accent);
-    color: #11110f;
+    color: var(--on-accent);
 }
 
 .catalog-car__ratio {
@@ -1296,10 +1387,10 @@ textarea {
 
     padding: 8px 11px;
 
-    background: rgba(12, 12, 11, 0.9);
+    background: var(--overlay);
     color: var(--accent);
 
-    border: 1px solid rgba(216, 180, 106, 0.25);
+    border: 1px solid rgba(var(--accent-rgb), 0.25);
 
     font-size: 0.75rem;
     font-weight: 700;
@@ -1382,10 +1473,10 @@ textarea {
 
     padding: 14px 18px;
 
-    background: rgba(24, 24, 21, 0.96);
-    border: 1px solid rgba(216, 180, 106, 0.35);
+    background: var(--panel-bg);
+    border: 1px solid rgba(var(--accent-rgb), 0.35);
     border-radius: var(--radius);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 14px 30px var(--shadow);
 
     backdrop-filter: blur(10px);
 }
@@ -1510,7 +1601,7 @@ textarea {
     border: 1px solid var(--border);
     border-radius: var(--radius);
 
-    background: #282824;
+    background: var(--image-bg);
 }
 
 .car-detail__image img {
@@ -1555,7 +1646,7 @@ textarea {
     background:
         linear-gradient(
             145deg,
-            rgba(216, 180, 106, 0.08),
+            rgba(var(--accent-rgb), 0.08),
             transparent
         ),
         var(--bg);
@@ -1786,13 +1877,13 @@ textarea {
 
 .field input::placeholder,
 .field textarea::placeholder {
-    color: #66645e;
+    color: var(--placeholder);
 }
 
 .field input:user-invalid,
 .field select:user-invalid,
 .field textarea:user-invalid {
-    border-color: #e9a08b;
+    border-color: var(--error);
 }
 
 .field select {
@@ -1845,7 +1936,7 @@ textarea {
 }
 
 .submit-status--error {
-    color: #e9a08b;
+    color: var(--error);
 }
 
 .submit-status:empty {
@@ -1973,9 +2064,9 @@ textarea {
         align-items: stretch;
         gap: 0;
 
-        background: #171714;
+        background: var(--bg-secondary);
         border-bottom: 1px solid var(--border);
-        box-shadow: 0 14px 24px #0007;
+        box-shadow: 0 14px 24px var(--shadow);
     }
 
     .nav.nav--open {
@@ -1989,7 +2080,7 @@ textarea {
     }
 
     .nav a:hover {
-        background: #ffffff0b;
+        background: var(--hover-tint);
     }
 
     .nav a::after {

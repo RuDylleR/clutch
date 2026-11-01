@@ -13,6 +13,18 @@
     <title>Авто — Clutch</title>
 
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- Тема ставится до отрисовки, чтобы страница не мигала. Логика переключателя — в script.js -->
+    <script>
+        try {
+            var theme = localStorage.getItem("clutch-theme");
+            if (theme !== "light" && theme !== "dark") {
+                theme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+            }
+            document.documentElement.dataset.theme = theme;
+        } catch (error) {
+            document.documentElement.dataset.theme = "dark";
+        }
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 
