@@ -58,7 +58,9 @@ a {
 }
 
 button,
-input {
+input,
+select,
+textarea {
     font: inherit;
 }
 
@@ -73,7 +75,8 @@ button {
 /* Видимый фокус при навигации с клавиатуры (карточки и кнопки — ссылки) */
 a:focus-visible,
 button:focus-visible,
-select:focus-visible {
+select:focus-visible,
+textarea:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
 }
@@ -140,7 +143,8 @@ select:focus-visible {
 .car-card,
 .club-card,
 input,
-select {
+select,
+textarea {
     border-radius: var(--radius);
 }
 
@@ -568,14 +572,6 @@ select {
     font-size: 0.85rem;
 }
 
-.calculator__form .button {
-    grid-column: 1 / -1;
-
-    justify-self: start;
-
-    margin-top: 10px;
-}
-
 .calculator__result {
     min-height: 280px;
 
@@ -736,10 +732,6 @@ select {
 
 .compare-results strong.is-winner {
     color: var(--accent);
-}
-
-.compare-button {
-    margin-top: 22px;
 }
 
 .compare-note {
@@ -1659,6 +1651,276 @@ select {
    RESPONSIVE
    ========================================================= */
 
+/* ================= ДОДАТИ АВТО ================= */
+
+.catalog-add {
+    padding: 60px 0;
+
+    border-top: 1px solid var(--border);
+
+    background: var(--bg-secondary);
+}
+
+.catalog-add__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.catalog-add h2 {
+    margin-bottom: 8px;
+
+    font-size: 1.6rem;
+}
+
+.catalog-add p {
+    color: var(--text-muted);
+}
+
+.submit-page {
+    padding: 150px 0 100px;
+}
+
+.submit-page h1 {
+    margin-bottom: 14px;
+
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+}
+
+.submit-page__lead {
+    max-width: 560px;
+    margin-bottom: 44px;
+
+    color: var(--text-muted);
+}
+
+.submit-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 40px;
+    align-items: start;
+}
+
+.submit-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    padding: 32px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    background: var(--bg-card);
+}
+
+.submit-form__title {
+    grid-column: 1 / -1;
+
+    font-size: 1.1rem;
+}
+
+.submit-form__title:not(:first-child) {
+    margin-top: 12px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    min-width: 0;
+}
+
+.field--wide {
+    grid-column: 1 / -1;
+}
+
+.field label {
+    color: var(--text-muted);
+
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.field small {
+    color: var(--text-muted);
+
+    font-size: 0.8rem;
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+
+    border: 1px solid var(--border);
+    outline: none;
+
+    background: var(--bg);
+    color: var(--text);
+
+    transition: border-color 0.2s ease;
+}
+
+.field input,
+.field select {
+    height: 48px;
+
+    padding: 0 15px;
+}
+
+.field textarea {
+    padding: 12px 15px;
+
+    resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: var(--accent);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+    color: #66645e;
+}
+
+.field input:user-invalid,
+.field select:user-invalid,
+.field textarea:user-invalid {
+    border-color: #e9a08b;
+}
+
+.field select {
+    cursor: pointer;
+}
+
+/* Пастка для ботів: поза екраном, але не display:none */
+.hp {
+    position: absolute;
+    left: -9999px;
+
+    width: 1px;
+    height: 1px;
+
+    overflow: hidden;
+}
+
+.consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    color: var(--text-muted);
+
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.consent input {
+    flex: 0 0 auto;
+
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+
+    accent-color: var(--accent);
+}
+
+.submit-form__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.submit-status {
+    color: var(--text-muted);
+
+    font-size: 0.9rem;
+}
+
+.submit-status--error {
+    color: #e9a08b;
+}
+
+.submit-status:empty {
+    display: none;
+}
+
+.submit-aside {
+    padding: 28px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.submit-aside h2 {
+    margin-bottom: 14px;
+
+    font-size: 1.05rem;
+}
+
+.submit-aside h2:not(:first-child) {
+    margin-top: 28px;
+}
+
+.submit-aside ol,
+.submit-aside ul {
+    display: grid;
+    gap: 10px;
+
+    padding-left: 20px;
+
+    color: var(--text-muted);
+
+    font-size: 0.9rem;
+}
+
+.submit-result {
+    display: grid;
+    gap: 18px;
+
+    padding: 32px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    background: var(--bg-card);
+}
+
+.submit-result p {
+    color: var(--text-muted);
+}
+
+.submit-result a:not(.button) {
+    color: var(--accent);
+}
+
+.submit-result__text {
+    width: 100%;
+    padding: 14px 15px;
+
+    border: 1px solid var(--border);
+
+    background: var(--bg);
+    color: var(--text);
+
+    font-family: monospace;
+    font-size: 0.85rem;
+}
+
+.submit-result__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+
 @media (max-width: 1050px) {
 
     .cars-filters {
@@ -1681,6 +1943,10 @@ select {
 
 
 @media (max-width: 900px) {
+
+    .submit-layout {
+        grid-template-columns: 1fr;
+    }
 
     /* Мобільне меню */
 
@@ -1785,6 +2051,21 @@ select {
 
 @media (max-width: 650px) {
 
+    .submit-page {
+        padding: 120px 0 70px;
+    }
+
+    .submit-form {
+        grid-template-columns: 1fr;
+        padding: 22px;
+    }
+
+    .catalog-add__inner {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
     .container {
         width: min(100% - 30px, var(--container));
     }
@@ -1849,10 +2130,6 @@ select {
         min-height: 220px;
 
         padding: 35px 20px;
-    }
-
-    .calculator__form .button {
-        width: 100%;
     }
 
     .cars-preview {

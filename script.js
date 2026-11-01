@@ -153,6 +153,24 @@ function readPositive(id) {
     return Number.isFinite(value) && value > 0 ? value : null;
 }
 
+// В поле что-то введено, но это не положительное число
+function hasInvalidInput(ids) {
+    return ids.some((id) => {
+        const element = document.getElementById(id);
+
+        return element && element.value.trim() !== "" && readPositive(id) === null;
+    });
+}
+
+// Запускает расчёт при каждом вводе в поле
+function onInput(id, handler) {
+    const input = document.getElementById(id);
+
+    if (input) {
+        input.addEventListener("input", handler);
+    }
+}
+
 // к.с./т, кг/к.с., кВт
 function metrics(power, weight) {
     return {
@@ -179,7 +197,11 @@ function calculatePowerToWeight() {
         resultElement.textContent = "—";
         document.getElementById("kg-per-hp").textContent = "—";
         document.getElementById("power-kw").textContent = "—";
-        error.textContent = "Введіть додатні значення потужності та маси.";
+
+        // Пустое поле — «ещё не ввели»; ошибка только для неверных чисел (0, минус)
+        error.textContent = hasInvalidInput(["power", "weight"])
+            ? "Введіть додатні значення потужності та маси."
+            : "";
         return;
     }
 
@@ -192,27 +214,8 @@ function calculatePowerToWeight() {
     document.getElementById("power-kw").textContent = fmt(result.kw);
 }
 
-const calculateButton = document.getElementById("calculate-button");
-
-if (calculateButton) {
-    calculateButton.addEventListener("click", calculatePowerToWeight);
-}
-
-// Enter в поле запускает расчёт
-function onEnter(id, handler) {
-    const input = document.getElementById(id);
-
-    if (input) {
-        input.addEventListener("keydown", (event) => {
-            if (event.key === "Enter") {
-                handler();
-            }
-        });
-    }
-}
-
-onEnter("power", calculatePowerToWeight);
-onEnter("weight", calculatePowerToWeight);
+onInput("power", calculatePowerToWeight);
+onInput("weight", calculatePowerToWeight);
 
 // Вкладки
 
@@ -264,7 +267,10 @@ function compareCars() {
     });
 
     if ([aPower, aWeight, bPower, bWeight].some((value) => value === null)) {
-        error.textContent = "Введіть додатні значення потужності та маси для обох авто.";
+        // Пустые поля — «ещё не ввели»; ошибка только для неверных чисел (0, минус)
+        error.textContent = hasInvalidInput(COMPARE_INPUT_IDS)
+            ? "Введіть додатні значення потужності та маси для обох авто."
+            : "";
         note.textContent = "Введіть характеристики обох автомобілів.";
         return;
     }
@@ -307,14 +313,21 @@ function compareCars() {
     note.textContent = `Перевага автомобіля ${winner}: +${fmt(difference)} к.с./т (+${fmt(percent)}%).`;
 }
 
-const compareButton = document.getElementById("compare-button");
+const COMPARE_INPUT_IDS = ["compare-power-a", "compare-weight-a", "compare-power-b", "compare-weight-b"];
 
-if (compareButton) {
-    compareButton.addEventListener("click", compareCars);
-}
+COMPARE_INPUT_IDS.forEach((id) => onInput(id, compareCars));
 
-["compare-power-a", "compare-weight-a", "compare-power-b", "compare-weight-b"]
-    .forEach((id) => onEnter(id, compareCars));
+
+// ---------- Заглушка вместо недостающего фото ----------
+
+// Если файла из cars.json ещё нет в images/, показываем images/placeholder.svg
+document.addEventListener("error", (event) => {
+    const image = event.target;
+
+    if (image instanceof HTMLImageElement && !image.src.endsWith("placeholder.svg")) {
+        image.src = "images/placeholder.svg";
+    }
+}, true);
 
 
 // ---------- Данные авто (cars.json) ----------
@@ -354,11 +367,15 @@ function carName(car) {
 }
 
 // id из cars.json; если его забыли — собираем из марки, модели и года
-function carId(car) {
-    return car.id || `${car.brand}-${car.model}-${car.year}`
+function slugify(text) {
+    return String(text)
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
+}
+
+function carId(car) {
+    return car.id || slugify(`${car.brand}-${car.model}-${car.year}`);
 }
 
 function carUrl(car) {
@@ -398,10 +415,6 @@ function fillCalculator(target, car) {
     document.getElementById(powerId).value = car.power;
     document.getElementById(weightId).value = car.weight;
     document.querySelector(`[data-fill="${target}"]`).value = carId(car);
-}
-
-function compareInputsFilled() {
-    return [...FILL_TARGETS.a, ...FILL_TARGETS.b].every((id) => readPositive(id) !== null);
 }
 
 // ?compare=id1,id2 открывает «Порівняння», ?car=id — «Один автомобіль»
@@ -447,7 +460,7 @@ function initCalculatorPickers(cars) {
 
             if (target === "single") {
                 calculatePowerToWeight();
-            } else if (compareInputsFilled()) {
+            } else {
                 compareCars();
             }
         });
@@ -518,7 +531,7 @@ if (carsPreview) {
 const carsGrid = document.getElementById("cars-grid");
 
 function createCarCard(car) {
-    const ratio = powerToWeight(car).toFixed(1);
+    const ratio = fmt(powerToWeight(car));
 
     return `
         <article class="catalog-car">
@@ -840,6 +853,217 @@ if (carDetail) {
         .then(renderCarPage)
         .catch((error) => showCarsError(carDetail, error));
 }
+
+
+// ---------- Форма «Додай своє авто» (submit.html) ----------
+
+// Куди відправляти заявки. Поки url порожній — форма покаже готовий текст,
+// який можна скопіювати й надіслати в Telegram/Discord (див. README).
+//   Formspree:  url: "https://formspree.io/f/XXXXXXXX"
+//   Web3Forms:  url: "https://api.web3forms.com/submit", extraFields: { access_key: "..." }
+const SUBMIT_FORM = {
+    url: "",
+    extraFields: {}
+};
+
+const SUBMIT_MIN_SECONDS = 3;   // швидше — це бот
+const submitOpenedAt = Date.now();
+
+function formValue(form, name) {
+    const field = form.elements[name];
+    return field ? field.value.trim() : "";
+}
+
+// Готовий шматок для cars.json: його лишається вставити в файл
+function buildCarEntry(data) {
+    const id = slugify(`${data.brand}-${data.model}`) || "car";
+    const entry = {
+        id,
+        brand: data.brand,
+        model: data.model,
+        year: Number(data.year),
+        engine: data.engine,
+        transmission: data.transmission,
+        drive: data.drive,
+        power: Number(data.power),
+        weight: Number(data.weight),
+        image: `images/${id}.jpg`,
+        featured: false
+    };
+
+    if (data.owner) { entry.owner = data.owner; }
+    if (data.city) { entry.city = data.city; }
+    if (data.description) { entry.description = data.description; }
+
+    return entry;
+}
+
+function buildSubmitPayload(form) {
+    const data = {};
+
+    ["brand", "model", "year", "engine", "transmission", "drive", "power", "weight",
+        "description", "photos", "owner", "city", "contact"].forEach((name) => {
+        data[name] = formValue(form, name);
+    });
+
+    const entry = buildCarEntry(data);
+    const lines = [
+        `Авто: ${data.brand} ${data.model} (${data.year})`,
+        `Двигун: ${data.engine}, ${data.transmission}, ${data.drive}`,
+        `Потужність: ${data.power} к.с., маса: ${data.weight} кг`,
+        `Власник: ${data.owner || "—"}, місто: ${data.city || "—"}`,
+        `Опис: ${data.description || "—"}`,
+        `Фото: ${data.photos || "—"}`,
+        `Контакт: ${data.contact}`
+    ];
+
+    return {
+        ...SUBMIT_FORM.extraFields,
+        ...data,
+        subject: "Нова заявка на авто — Clutch",
+        message: lines.join("\n"),
+        cars_json: JSON.stringify(entry, null, 2)
+    };
+}
+
+function showSubmitStatus(text, isError) {
+    const status = document.getElementById("submit-status");
+
+    if (status) {
+        status.textContent = text;
+        status.classList.toggle("submit-status--error", Boolean(isError));
+    }
+}
+
+function showSubmitSuccess(container) {
+    container.innerHTML = `
+        <div class="submit-result">
+            <h2>Заявку надіслано</h2>
+            <p>Дякуємо! Ми перевіримо дані й додамо авто в каталог. Фото можна надіслати нам у
+                <a href="${escapeHTML(SITE_LINKS.telegram)}" target="_blank" rel="noopener noreferrer">Telegram</a>
+                або
+                <a href="${escapeHTML(SITE_LINKS.discord)}" target="_blank" rel="noopener noreferrer">Discord</a>.</p>
+            <div class="submit-result__actions">
+                <a class="button button--primary" href="cars.html">До каталогу</a>
+                <button class="button button--secondary" type="button" id="submit-again">Додати ще одне авто</button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById("submit-again").addEventListener("click", () => window.location.reload());
+}
+
+// Без сервісу форм: показуємо текст заявки, щоб його можна було скопіювати
+function showSubmitFallback(container, payload) {
+    const text = `${payload.message}\n\n${payload.cars_json}`;
+
+    container.innerHTML = `
+        <div class="submit-result">
+            <h2>Майже готово</h2>
+            <p>Скопіюй цей текст і надішли його нам у
+                <a href="${escapeHTML(SITE_LINKS.telegram)}" target="_blank" rel="noopener noreferrer">Telegram</a>
+                або
+                <a href="${escapeHTML(SITE_LINKS.discord)}" target="_blank" rel="noopener noreferrer">Discord</a>
+                разом із фото.</p>
+            <textarea class="submit-result__text" id="submit-copy-text" rows="14" readonly>${escapeHTML(text)}</textarea>
+            <div class="submit-result__actions">
+                <button class="button button--primary" type="button" id="submit-copy">Скопіювати</button>
+                <a class="button button--secondary" href="cars.html">До каталогу</a>
+            </div>
+            <p class="submit-status" id="submit-copy-status" role="status" aria-live="polite"></p>
+        </div>
+    `;
+
+    const textarea = document.getElementById("submit-copy-text");
+    const copyStatus = document.getElementById("submit-copy-status");
+
+    document.getElementById("submit-copy").addEventListener("click", async () => {
+        try {
+            await navigator.clipboard.writeText(text);
+            copyStatus.textContent = "Скопійовано.";
+        } catch (error) {
+            textarea.select();
+            copyStatus.textContent = "Виділено, натисни Ctrl+C.";
+        }
+    });
+}
+
+async function sendSubmission(payload) {
+    const response = await fetch(SUBMIT_FORM.url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+
+    let result = {};
+
+    try {
+        result = await response.json();
+    } catch (error) {
+        result = {};
+    }
+
+    if (!response.ok || result.success === false || result.ok === false) {
+        throw new Error("submit failed");
+    }
+}
+
+function initSubmitForm() {
+    const form = document.getElementById("submit-form");
+    const container = document.getElementById("submit-main");
+    const button = document.getElementById("submit-button");
+
+    if (!form || !container || !button) {
+        return;
+    }
+
+    form.elements.year.max = String(new Date().getFullYear() + 1);
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!form.reportValidity()) {
+            return;
+        }
+
+        // Бот заповнив прихований рядок або надіслав форму миттєво:
+        // вдаємо, що все добре, але нічого не відправляємо
+        const tooFast = (Date.now() - submitOpenedAt) / 1000 < SUBMIT_MIN_SECONDS;
+
+        if (formValue(form, "website") !== "" || tooFast) {
+            if (formValue(form, "website") !== "") {
+                showSubmitSuccess(container);
+                return;
+            }
+
+            showSubmitStatus("Заповнюй трохи повільніше й спробуй ще раз.", true);
+            return;
+        }
+
+        const payload = buildSubmitPayload(form);
+
+        if (!SUBMIT_FORM.url) {
+            showSubmitFallback(container, payload);
+            return;
+        }
+
+        button.disabled = true;
+        showSubmitStatus("Надсилаємо…", false);
+
+        try {
+            await sendSubmission(payload);
+            showSubmitSuccess(container);
+        } catch (error) {
+            button.disabled = false;
+            showSubmitStatus("Не вдалося надіслати. Спробуй ще раз або напиши нам у Telegram чи Discord.", true);
+        }
+    });
+}
+
+initSubmitForm();
 
 
 // ---------- Мобильное меню ----------

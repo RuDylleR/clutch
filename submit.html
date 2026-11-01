@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Додай своє авто до гаража Clutch: заповни коротку форму з характеристиками, і ми додамо його на сайт."
+    >
+
+    <title>Додати своє авто — Clutch</title>
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body data-page="cars">
+
+    <!-- Шапка подставляется из script.js -->
+    <header class="header" data-site-header></header>
+
+
+    <main>
+
+        <section class="submit-page">
+            <div class="container">
+
+                <a class="back-link" href="cars.html">← До каталогу</a>
+
+                <p class="hero__eyebrow">Гараж спільноти</p>
+                <h1>Додай своє авто</h1>
+                <p class="submit-page__lead">
+                    Заповни коротку форму. Ми перевіримо дані й додамо авто в каталог Clutch.
+                </p>
+
+                <div class="submit-layout">
+
+                    <!-- Форма и результат отправки (script.js) -->
+                    <div class="submit-main" id="submit-main">
+
+                        <form class="submit-form" id="submit-form">
+
+                            <h2 class="submit-form__title">Авто</h2>
+
+                            <div class="field">
+                                <label for="f-brand">Марка *</label>
+                                <input id="f-brand" name="brand" type="text" required maxlength="40" placeholder="Chevrolet" autocomplete="off">
+                            </div>
+
+                            <div class="field">
+                                <label for="f-model">Модель *</label>
+                                <input id="f-model" name="model" type="text" required maxlength="40" placeholder="Evanda" autocomplete="off">
+                            </div>
+
+                            <div class="field">
+                                <label for="f-year">Рік *</label>
+                                <input id="f-year" name="year" type="number" required min="1950" step="1" placeholder="2006" inputmode="numeric">
+                            </div>
+
+                            <div class="field">
+                                <label for="f-engine">Двигун *</label>
+                                <input id="f-engine" name="engine" type="text" required maxlength="30" placeholder="2.0 л" autocomplete="off">
+                            </div>
+
+                            <div class="field">
+                                <label for="f-transmission">Коробка *</label>
+                                <select id="f-transmission" name="transmission" required>
+                                    <option value="">Обери…</option>
+                                    <option value="МКПП">МКПП</option>
+                                    <option value="АКПП">АКПП</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="f-drive">Привід *</label>
+                                <select id="f-drive" name="drive" required>
+                                    <option value="">Обери…</option>
+                                    <option value="FWD">FWD</option>
+                                    <option value="RWD">RWD</option>
+                                    <option value="AWD">AWD</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="f-power">Потужність, к.с. *</label>
+                                <input id="f-power" name="power" type="number" required min="1" max="2000" step="any" placeholder="131" inputmode="decimal">
+                            </div>
+
+                            <div class="field">
+                                <label for="f-weight">Маса, кг *</label>
+                                <input id="f-weight" name="weight" type="number" required min="300" max="6000" step="any" placeholder="1499" inputmode="decimal">
+                                <small>З техпаспорта (споряджена маса)</small>
+                            </div>
+
+                            <div class="field field--wide">
+                                <label for="f-description">Про авто</label>
+                                <textarea id="f-description" name="description" rows="4" maxlength="400" placeholder="Стоковий седан, їжджу щодня…"></textarea>
+                                <small>Необов'язково, до 400 символів. Покажемо на сторінці авто.</small>
+                            </div>
+
+                            <div class="field field--wide">
+                                <label for="f-photos">Посилання на фото</label>
+                                <textarea id="f-photos" name="photos" rows="2" maxlength="500" placeholder="Google Диск, Imgur… або надішли фото нам у чат"></textarea>
+                                <small>Фото має бути твоїм. Закрий номерні знаки або обери ракурс без них.</small>
+                            </div>
+
+                            <h2 class="submit-form__title">Про тебе</h2>
+
+                            <div class="field">
+                                <label for="f-owner">Як підписати на сайті</label>
+                                <input id="f-owner" name="owner" type="text" maxlength="40" placeholder="Нік або ім'я" autocomplete="off">
+                            </div>
+
+                            <div class="field">
+                                <label for="f-city">Місто</label>
+                                <input id="f-city" name="city" type="text" maxlength="40" placeholder="Охтирка" autocomplete="off">
+                            </div>
+
+                            <div class="field field--wide">
+                                <label for="f-contact">Як з тобою зв'язатися *</label>
+                                <input id="f-contact" name="contact" type="text" required maxlength="80" placeholder="Telegram @нік або Discord" autocomplete="off">
+                                <small>Бачимо тільки ми, на сайті не публікується.</small>
+                            </div>
+
+                            <!-- Пастка для ботів: людина це поле не бачить -->
+                            <div class="hp" aria-hidden="true">
+                                <label for="f-website">Не заповнюй це поле</label>
+                                <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                            </div>
+
+                            <label class="consent field--wide">
+                                <input type="checkbox" id="f-consent" name="consent" required>
+                                <span>Погоджуюсь, що дані та фото авто будуть опубліковані на сайті Clutch.</span>
+                            </label>
+
+                            <div class="submit-form__actions field--wide">
+                                <button class="button button--primary" id="submit-button" type="submit">Надіслати заявку</button>
+                                <p class="submit-status" id="submit-status" role="status" aria-live="polite"></p>
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                    <aside class="submit-aside">
+                        <h2>Як це працює</h2>
+
+                        <ol>
+                            <li>Заповни форму: потрібні лише характеристики авто та контакт.</li>
+                            <li>Надішли фото в наш Telegram або Discord, вказавши нік із форми (або додай посилання вище).</li>
+                            <li>Ми перевіримо дані й додамо авто в каталог.</li>
+                        </ol>
+
+                        <h2>Про фото</h2>
+
+                        <ul>
+                            <li>Тільки твоє авто та твої фото.</li>
+                            <li>Номерні знаки краще закрити.</li>
+                            <li>Горизонтальний кадр 4:3, мінімум 800×600.</li>
+                        </ul>
+                    </aside>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- Футер подставляется из script.js -->
+    <footer class="footer" data-site-footer></footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
