@@ -1,0 +1,77 @@
+[
+    {
+        "id": "chevrolet-evanda",
+        "brand": "Chevrolet",
+        "model": "Evanda",
+        "year": 2006,
+        "engine": "2.0 л",
+        "transmission": "МКПП",
+        "drive": "FWD",
+        "power": 131,
+        "weight": 1499,
+        "image": "images/chevrolet-evanda.jpg",
+        "featured": true
+    },
+    {
+        "id": "volkswagen-golf",
+        "brand": "Volkswagen",
+        "model": "Golf",
+        "year": 2010,
+        "engine": "1.6 л",
+        "transmission": "МКПП",
+        "drive": "FWD",
+        "power": 102,
+        "weight": 1217,
+        "image": "images/volkswagen-golf.jpg",
+        "featured": true
+    },
+    {
+        "id": "honda-accord",
+        "brand": "Honda",
+        "model": "Accord",
+        "year": 2008,
+        "engine": "2.4 л",
+        "transmission": "МКПП",
+        "drive": "FWD",
+        "power": 201,
+        "weight": 1488,
+        "image": "images/honda-accord.jpg",
+        "featured": true
+    },
+    {
+        "id": "bmw-320i",
+        "brand": "BMW",
+        "model": "320i",
+        "year": 2006,
+        "engine": "2.0 л",
+        "transmission": "МКПП",
+        "drive": "RWD",
+        "power": 150,
+        "weight": 1395,
+        "image": "images/bmw-320i.jpg"
+    },
+    {
+        "id": "subaru-impreza",
+        "brand": "Subaru",
+        "model": "Impreza 2.0R",
+        "year": 2008,
+        "engine": "2.0 л",
+        "transmission": "МКПП",
+        "drive": "AWD",
+        "power": 150,
+        "weight": 1355,
+        "image": "images/subaru-impreza.jpg"
+    },
+    {
+        "id": "toyota-camry",
+        "brand": "Toyota",
+        "model": "Camry",
+        "year": 2008,
+        "engine": "2.4 л",
+        "transmission": "АКПП",
+        "drive": "FWD",
+        "power": 167,
+        "weight": 1520,
+        "image": "images/toyota-camry.jpg"
+    }
+]

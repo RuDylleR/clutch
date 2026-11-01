@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Автомобіль учасника Clutch — характеристики, потужність та співвідношення потужності до маси."
+    >
+
+    <title>Авто — Clutch</title>
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body data-page="cars">
+
+    <!-- Шапка подставляется из script.js -->
+    <header class="header" data-site-header></header>
+
+
+    <main>
+
+        <!-- ================= CAR ================= -->
+
+        <section class="car-page">
+            <div class="container">
+
+                <a class="back-link" href="cars.html">← До каталогу</a>
+
+                <!-- Содержимое подставляется из cars.json по ?id= (script.js) -->
+                <div class="car-detail" id="car-detail" aria-live="polite"></div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= OTHER CARS ================= -->
+
+        <section class="section car-others" id="car-others" hidden>
+            <div class="container">
+
+                <div class="section-heading section-heading--row">
+
+                    <div>
+                        <p class="section-heading__eyebrow">
+                            Гараж спільноти
+                        </p>
+
+                        <h2>Інші авто учасників</h2>
+                    </div>
+
+                    <a class="text-link" href="cars.html">
+                        Усі авто →
+                    </a>
+
+                </div>
+
+                <div class="cars-preview" id="car-others-grid"></div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- Футер подставляется из script.js -->
+    <footer class="footer" data-site-footer></footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Автомобілі учасників Clutch — характеристики, потужність та співвідношення потужності до маси."
+    >
+
+    <title>Авто учасників — Clutch</title>
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body data-page="cars">
+
+    <!-- Шапка подставляется из script.js -->
+    <header class="header" data-site-header></header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+
+        <!-- ================= CARS HERO ================= -->
+
+        <section class="cars-page-hero">
+
+            <div class="container">
+
+                <p class="hero__eyebrow">
+                    Гараж спільноти
+                </p>
+
+                <h1>
+                    АВТОМОБІЛІ<br>
+                    <span>УЧАСНИКІВ.</span>
+                </h1>
+
+                <p class="cars-page-hero__description">
+                    Реальні автомобілі учасників Clutch.
+                    Порівнюй характеристики, потужність та
+                    співвідношення потужності до маси.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CATALOG ================= -->
+
+        <section class="cars-catalog">
+
+            <div class="container">
+
+
+                <!-- CATALOG HEADER -->
+
+                <div class="catalog-header">
+
+                    <div>
+                        <p class="section-heading__eyebrow">
+                            Каталог
+                        </p>
+
+                        <h2>Знайди свій vibe</h2>
+                    </div>
+
+                    <p class="catalog-count">
+                        Знайдено:
+                        <strong id="cars-count">0</strong>
+                    </p>
+
+                </div>
+
+
+                <!-- ================= FILTERS ================= -->
+
+                <div class="cars-filters">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="filter-group filter-group--search">
+
+                        <label for="car-search">
+                            Пошук
+                        </label>
+
+                        <input
+                            type="search"
+                            id="car-search"
+                            placeholder="Марка або модель..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <!-- DRIVE -->
+
+                    <div class="filter-group">
+
+                        <label for="drive-filter">
+                            Привід
+                        </label>
+
+                        <select id="drive-filter">
+
+                            <option value="all">
+                                Усі
+                            </option>
+
+                            <option value="FWD">
+                                FWD
+                            </option>
+
+                            <option value="RWD">
+                                RWD
+                            </option>
+
+                            <option value="AWD">
+                                AWD
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TRANSMISSION -->
+
+                    <div class="filter-group">
+
+                        <label for="transmission-filter">
+                            Коробка
+                        </label>
+
+                        <select id="transmission-filter">
+
+                            <option value="all">
+                                Усі
+                            </option>
+
+                            <option value="МКПП">
+                                МКПП
+                            </option>
+
+                            <option value="АКПП">
+                                АКПП
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SORT -->
+
+                    <div class="filter-group">
+
+                        <label for="sort-filter">
+                            Сортування
+                        </label>
+
+                        <select id="sort-filter">
+
+                            <option value="default">
+                                За замовчуванням
+                            </option>
+
+                            <option value="power-desc">
+                                Потужність ↓
+                            </option>
+
+                            <option value="power-asc">
+                                Потужність ↑
+                            </option>
+
+                            <option value="ratio-desc">
+                                к.с./т ↓
+                            </option>
+
+                            <option value="ratio-asc">
+                                к.с./т ↑
+                            </option>
+
+                            <option value="year-desc">
+                                Новіші спочатку
+                            </option>
+
+                            <option value="year-asc">
+                                Старіші спочатку
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- RESET -->
+
+                    <button
+                        class="filters-reset"
+                        id="filters-reset"
+                        type="button"
+                    >
+                        Скинути
+                    </button>
+
+                </div>
+
+
+                <!-- ================= CAR GRID ================= -->
+
+                <div
+                    class="cars-grid"
+                    id="cars-grid"
+                    aria-live="polite"
+                >
+
+                    <!-- Карточки подставляются из cars.json (script.js) -->
+
+                </div>
+
+
+                <!-- ================= EMPTY STATE ================= -->
+
+                <div
+                    class="cars-empty"
+                    id="cars-empty"
+                    hidden
+                >
+
+                    <p class="cars-empty__number">
+                        404
+                    </p>
+
+                    <h3>
+                        Автомобілів не знайдено
+                    </h3>
+
+                    <p>
+                        Спробуй змінити параметри пошуку
+                        або скинути фільтри.
+                    </p>
+
+                    <button
+                        class="button button--secondary"
+                        id="empty-reset"
+                        type="button"
+                    >
+                        Скинути фільтри
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CTA ================= -->
+
+        <section class="cars-cta">
+
+            <div class="container cars-cta__inner">
+
+                <div>
+
+                    <p class="section-heading__eyebrow">
+                        Clutch
+                    </p>
+
+                    <h2>
+                        Потужність — це ще не все.
+                    </h2>
+
+                    <p>
+                        Порівняй автомобілі за співвідношенням
+                        потужності до маси.
+                    </p>
+
+                </div>
+
+                <a
+                    href="index.html#calculator"
+                    class="button button--primary"
+                >
+                    Відкрити калькулятор
+                </a>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- Панель сравнения: появляется, когда на карточках выбрано авто (script.js) -->
+    <div class="compare-bar" id="compare-bar" hidden>
+        <p class="compare-bar__text" id="compare-bar-text" aria-live="polite"></p>
+
+        <div class="compare-bar__actions">
+            <button class="filters-reset" id="compare-clear" type="button">Скинути</button>
+            <a class="button button--primary" id="compare-go" href="index.html#calculator">Порівняти</a>
+        </div>
+    </div>
+
+
+    <!-- Футер подставляется из script.js -->
+    <footer class="footer" data-site-footer></footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
